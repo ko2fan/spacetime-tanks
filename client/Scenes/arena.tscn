@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c13gcicdjvrt"]
+
+[ext_resource type="PackedScene" uid="uid://bo14413hqfeby" path="res://Scenes/terrain.tscn" id="1_4d5br"]
+[ext_resource type="Script" path="res://Scripts/arena.cs" id="1_yeeor"]
+
+[node name="Arena" type="Node2D"]
+script = ExtResource("1_yeeor")
+
+[node name="Terrain" parent="." instance=ExtResource("1_4d5br")]
+z_index = -100
+
+[node name="SpawnLocations" type="Node" parent="."]
+
+[node name="Spawn1" type="Node2D" parent="SpawnLocations"]
+position = Vector2(591, 300)

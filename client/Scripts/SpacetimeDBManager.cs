@@ -1,7 +1,5 @@
 using Godot;
 using SpacetimeDB;
-using SpacetimeDB.Types;
-using System.Net.WebSockets;
 using System.Collections.Generic;
 
 public partial class SpacetimeDBManager : Node
@@ -61,6 +59,7 @@ public partial class SpacetimeDBManager : Node
 	
 	void OnSubscriptionApplied()
 	{
+		GameManager.Instance.network_loaded();
 		
 		// Now that we've done this work we can unregister this callback
 		SpacetimeDBClient.instance.onSubscriptionApplied -= OnSubscriptionApplied;

@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://cepwuq153q8sr"]
+
+[ext_resource type="Texture2D" uid="uid://bd82rm0jc70ie" path="res://Art/PNG/Retina/tankBody_blue.png" id="1_6ueeh"]
+[ext_resource type="Script" path="res://Scripts/player_tank.cs" id="1_8xvpt"]
+[ext_resource type="Texture2D" uid="uid://dbpgd8uyf3qe5" path="res://Art/PNG/Retina/tankBlue_barrel2.png" id="2_55431"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uh8ih"]
+
+[node name="PlayerTank" type="CharacterBody2D"]
+script = ExtResource("1_8xvpt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_uh8ih")
+
+[node name="Body" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = ExtResource("1_6ueeh")
+
+[node name="Barrel" type="Sprite2D" parent="."]
+position = Vector2(29, 0)
+rotation = 1.5708
+texture = ExtResource("2_55431")

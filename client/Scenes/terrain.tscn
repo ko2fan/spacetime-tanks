@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bo14413hqfeby"]
+
+[ext_resource type="Texture2D" uid="uid://dy2tp2adx46c3" path="res://Art/PNG/Retina/tileGrass1.png" id="1_gh7op"]
+
+[node name="Terrain" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(64, 66)
+scale = Vector2(100, 100)
+texture = ExtResource("1_gh7op")

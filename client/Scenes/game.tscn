@@ -1,8 +1,48 @@
-[gd_scene load_steps=2 format=3 uid="uid://c3xcsmjr7nxua"]
+[gd_scene load_steps=3 format=3 uid="uid://c3xcsmjr7nxua"]
 
 [ext_resource type="Script" path="res://Scripts/SpacetimeDBManager.cs" id="1_j74sw"]
+[ext_resource type="PackedScene" uid="uid://d0v4ocfk8n8ko" path="res://Scenes/ui.tscn" id="2_df1r4"]
 
 [node name="Game" type="Node2D"]
 
 [node name="SpacetimeDBManager" type="Node" parent="."]
 script = ExtResource("1_j74sw")
+
+[node name="UI" parent="." instance=ExtResource("2_df1r4")]
+custom_minimum_size = Vector2(1280, 720)
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 460.0
+offset_top = 360.0
+offset_right = 760.0
+offset_bottom = 460.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.5
+offset_top = -13.0
+offset_right = 80.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Connecting to server"

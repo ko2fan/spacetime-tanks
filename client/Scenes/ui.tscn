@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0v4ocfk8n8ko"]
+
+[ext_resource type="Script" path="res://Scripts/ui.gd" id="1_6bueh"]
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6bueh")
+
+[node name="Lobby" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CreateArenaButton" type="Button" parent="Lobby"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -73.0
+offset_top = 100.0
+offset_right = 73.0
+offset_bottom = 131.0
+grow_horizontal = 2
+text = "Create new Arena"
+
+[node name="JoinArenaButton" type="Button" parent="Lobby"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 350.0
+offset_right = 100.0
+offset_bottom = 550.0
+grow_horizontal = 2
+text = "Join Existing Arena"
+
+[connection signal="pressed" from="Lobby/CreateArenaButton" to="." method="_on_create_arena_button_pressed"]
+[connection signal="pressed" from="Lobby/JoinArenaButton" to="." method="_on_join_arena_button_pressed"]
