@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3xcsmjr7nxua"]
+
+[ext_resource type="Script" path="res://Scripts/SpacetimeDBManager.cs" id="1_j74sw"]
+
+[node name="Game" type="Node2D"]
+
+[node name="SpacetimeDBManager" type="Node" parent="."]
+script = ExtResource("1_j74sw")
