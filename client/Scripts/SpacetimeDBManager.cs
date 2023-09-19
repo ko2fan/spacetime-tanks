@@ -9,7 +9,7 @@ public partial class SpacetimeDBManager : Node
 	private Identity local_identity;
 
 	const string HOST = "localhost:3000";
-	const string DBNAME = "plutonomics";
+	const string DBNAME = "spacetime-tanks";
 	const bool SSL_ENABLED = false;
 
 	public override void _Ready()
