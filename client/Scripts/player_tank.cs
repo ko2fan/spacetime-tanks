@@ -7,6 +7,14 @@ public partial class player_tank : CharacterBody2D
 	private StdbVector2 tankPosition = new StdbVector2();
 	private StdbVector2 tankDirection = new StdbVector2();
 	private bool isControlled = false;
+	private ulong entityId;
+
+	public override void _Ready()
+	{
+		base._Ready();
+		
+		MobileLocationComponent.OnUpdate += MobileLocationComponent_OnUpdate;
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -44,5 +52,26 @@ public partial class player_tank : CharacterBody2D
 	public void SetControlled()
 	{
 		isControlled = true;
+		GD.Print("Set as local player");
+	}
+
+	public void SetEntityId(ulong entity)
+	{
+		entityId = entity;
+	}
+
+	void MobileLocationComponent_OnUpdate(MobileLocationComponent oldValue, MobileLocationComponent newValue,
+		ReducerEvent reducerEvent)
+	{
+		if(newValue.EntityId == entityId)
+		{
+			// update the Tank position and direction
+			tankPosition = newValue.Location;
+			tankDirection = newValue.Direction;
+
+			Position = new Vector2(tankPosition.X, tankPosition.Z);
+			Vector2 direction = new Vector2(tankDirection.X, tankDirection.Z);
+			LookAt(Position + direction);
+		}
 	}
 }

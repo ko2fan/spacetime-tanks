@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://c13gcicdjvrt"]
 
 [ext_resource type="PackedScene" uid="uid://bo14413hqfeby" path="res://Scenes/terrain.tscn" id="1_4d5br"]
-[ext_resource type="Script" path="res://Scripts/arena.cs" id="1_yeeor"]
+[ext_resource type="Script" path="res://Scripts/Arena.cs" id="1_hrhv6"]
 
 [node name="Arena" type="Node2D"]
-script = ExtResource("1_yeeor")
+script = ExtResource("1_hrhv6")
 
 [node name="Terrain" parent="." instance=ExtResource("1_4d5br")]
 z_index = -100

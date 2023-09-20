@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Collections.Generic;
 
 public partial class GameManager : Node
 {
@@ -7,6 +7,8 @@ public partial class GameManager : Node
 
     private Control ui;
     private Control control;
+    private List<Player> playerList = new List<Player>();
+    private bool gameStarted;
 
     public override void _EnterTree()
     {
@@ -24,5 +26,27 @@ public partial class GameManager : Node
     {
         control.Hide();
         ui.Show();
+    }
+
+    public void AddPlayer(bool localPlayer, ulong entityId)
+    {
+        Player player = new Player();
+        player.SetEntityId(entityId);
+        if (localPlayer)
+        {
+            player.SetLocal();
+        }
+        playerList.Add(player);
+
+        if (gameStarted)
+        {
+            var arena = GetNode<Arena>("/root/Game/Arena");
+            arena.SpawnTank(localPlayer, entityId);
+        }
+    }
+
+    public List<Player> GetPlayerList()
+    {
+        return playerList;
     }
 }

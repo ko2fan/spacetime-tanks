@@ -1,9 +1,7 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using SpacetimeDB.Types;
 
-public partial class arena : Node2D
+public partial class Arena : Node2D
 {
     private bool isOwner = false;
     private List<player_tank> tanks = new List<player_tank>();
@@ -19,19 +17,26 @@ public partial class arena : Node2D
         {
             chosenSpawnLocation = node.Position;
         }
-        SpawnTank(true);
+        StartGame();
     }
 
-    public void SetOwner() => isOwner = true;
+    public void StartGame()
+    {
+        foreach (Player player in GameManager.Instance.GetPlayerList())
+        {
+            GD.Print("Adding player");
+            SpawnTank(player.GetLocal(), player.GetEntityId());
+        }
+    }
 
-    void SpawnTank(bool controlled)
+    public void SpawnTank(bool controlled, ulong EntityId)
     {
         player_tank tank = tankScene.Instantiate<player_tank>();
         if (controlled)
             tank.SetControlled();
+        tank.SetEntityId(EntityId);
         tanks.Add(tank);
         tank.GlobalPosition = chosenSpawnLocation;
         AddChild(tank);
-        Reducer.CreatePlayer("tank1");
     }
 }
