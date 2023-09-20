@@ -42,7 +42,13 @@ public partial class GameManager : Node
         {
             var arena = GetNode<Arena>("/root/Game/Arena");
             arena.SpawnTank(localPlayer, entityId);
+            GD.Print("Spawned new tank");
         }
+    }
+
+    public void StartGame()
+    {
+        gameStarted = true;
     }
 
     public List<Player> GetPlayerList()

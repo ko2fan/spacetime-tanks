@@ -12,7 +12,9 @@ namespace SpacetimeDB.Types
 	{
 		None,
 		CreatePlayer,
+		MoveBullets,
 		MovePlayer,
+		ShootBullet,
 		StopPlayer,
 	}
 
@@ -34,12 +36,28 @@ namespace SpacetimeDB.Types
 				return (CreatePlayerArgsStruct)Args;
 			}
 		}
+		public MoveBulletsArgsStruct MoveBulletsArgs
+		{
+			get
+			{
+				if (Reducer != ReducerType.MoveBullets) throw new SpacetimeDB.ReducerMismatchException(Reducer.ToString(), "MoveBullets");
+				return (MoveBulletsArgsStruct)Args;
+			}
+		}
 		public MovePlayerArgsStruct MovePlayerArgs
 		{
 			get
 			{
 				if (Reducer != ReducerType.MovePlayer) throw new SpacetimeDB.ReducerMismatchException(Reducer.ToString(), "MovePlayer");
 				return (MovePlayerArgsStruct)Args;
+			}
+		}
+		public ShootBulletArgsStruct ShootBulletArgs
+		{
+			get
+			{
+				if (Reducer != ReducerType.ShootBullet) throw new SpacetimeDB.ReducerMismatchException(Reducer.ToString(), "ShootBullet");
+				return (ShootBulletArgsStruct)Args;
 			}
 		}
 		public StopPlayerArgsStruct StopPlayerArgs
@@ -62,11 +80,26 @@ namespace SpacetimeDB.Types
 						args.Username,
 					};
 				}
+				case ReducerType.MoveBullets:
+				{
+					var args = MoveBulletsArgs;
+					return new object[] {
+						args.PrevTime,
+					};
+				}
 				case ReducerType.MovePlayer:
 				{
 					var args = MovePlayerArgs;
 					return new object[] {
 						args.Start,
+						args.Direction,
+					};
+				}
+				case ReducerType.ShootBullet:
+				{
+					var args = ShootBulletArgs;
+					return new object[] {
+						args.Location,
 						args.Direction,
 					};
 				}

@@ -26,6 +26,7 @@ public partial class SpacetimeDBManager : Node
 	            "SELECT * FROM SpawnableEntityComponent",
 	            "SELECT * FROM PlayerComponent",
 	            "SELECT * FROM MobileLocationComponent",
+	            "SELECT * FROM BulletComponent",
             });
             
         };

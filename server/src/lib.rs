@@ -1,3 +1,4 @@
+use std::ops::{Add, Mul};
 use spacetimedb::{spacetimedb, Identity, SpacetimeType, Timestamp, ReducerContext};
 use log;
 
@@ -30,12 +31,42 @@ pub struct PlayerComponent {
     pub logged_in: bool,
 }
 
+#[derive(Clone)]
+#[spacetimedb(table)]
+pub struct BulletComponent {
+    // Spawned by player when they shoot
+
+    #[primarykey]
+    pub entity_id: u64,
+
+    pub lifetime: f32,
+}
+
 #[derive(SpacetimeType, Clone)]
 pub struct StdbVector2 {
     // A spacetime type which can be used in tables and reducers to represent
     // a 2d position.
     pub x: f32,
     pub z: f32,
+}
+
+impl Mul<f32> for StdbVector2 {
+    type Output = StdbVector2;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        let x = self.x * rhs;
+        let z = self.z * rhs;
+        Self { x, z }
+    }
+}
+impl Add for StdbVector2 {
+    type Output = StdbVector2;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let x = self.x + rhs.x;
+        let z = self.z + rhs.z;
+        Self { x, z }
+    }
 }
 
 impl StdbVector2 {
@@ -108,9 +139,42 @@ pub fn create_player(ctx: ReducerContext, username: String) -> Result<(), String
     Ok(())
 }
 
+#[spacetimedb(reducer)]
+pub fn shoot_bullet(_ctx: ReducerContext, location: StdbVector2, direction: StdbVector2) -> Result<(), String> {
+    // This reducer is called when the player shoots a bullet
+
+    let lifetime = 32.0;
+    // Next we create the SpawnableEntityComponent. The entity_id for this
+    // component automatically increments and we get it back from the result
+    // of the insert call and use it for all components.
+
+    let entity_id = SpawnableEntityComponent::insert(SpawnableEntityComponent { entity_id: 0 })
+        .expect("Failed to create player spawnable entity component.")
+        .entity_id;
+    // The BulletComponent uses the same entity_id and stores the current lifetime
+    BulletComponent::insert(BulletComponent { entity_id, lifetime, })
+        .expect("Failed to insert bullet component.");
+
+    // The MobileLocationComponent is used to calculate the current position
+    // of an entity that can move smoothly in the world. We are using 2d
+    // positions
+    MobileLocationComponent::insert(MobileLocationComponent {
+        entity_id,
+        location,
+        direction,
+        move_start_timestamp: Timestamp::UNIX_EPOCH,
+    })
+        .expect("Failed to insert bullet mobile entity component.");
+
+    log::info!("Bullet created: {}", entity_id);
+
+    Ok(())
+}
+
 #[spacetimedb(init)]
 pub fn init() {
     // Called when the module is initially published
+    spacetimedb::schedule!("60ms", move_bullets(_, Timestamp::now()));
 }
 
 #[spacetimedb(connect)]
@@ -170,6 +234,34 @@ pub fn move_player(
     return Err("Player not found".to_string());
 }
 
+#[spacetimedb(reducer, repeat = 60ms)]
+pub fn move_bullets(_ctx: ReducerContext, _prev_time: Timestamp) -> Result<(), String> {
+    // Update the MobileLocationComponent with the current movement
+    // values. The server will repeatedly call this every 60ms
+
+    // First, look up the player using the sender identity, then use that
+    // entity_id to retrieve and update the MobileLocationComponent
+    let bullet_speed = 50.0;
+    for bullet in BulletComponent::iter() {
+        if let Some(mut mobile) = MobileLocationComponent::filter_by_entity_id(&bullet.entity_id) {
+            let old_mobile = mobile.clone();
+            let new_position = old_mobile.location + old_mobile.direction * bullet_speed;
+            mobile.location = new_position;
+            MobileLocationComponent::update_by_entity_id(&bullet.entity_id, mobile);
+        }
+
+        let mut bullet = bullet.clone();
+        let entity_id = bullet.entity_id;
+        bullet.lifetime = bullet.lifetime - 1.0;
+        if bullet.lifetime <= 0.0 {
+            BulletComponent::delete_by_entity_id(&entity_id);
+        } else {
+            BulletComponent::update_by_entity_id(&entity_id, bullet);
+        }
+    }
+
+    return Ok(());
+}
 
 #[spacetimedb(reducer)]
 pub fn stop_player(ctx: ReducerContext, location: StdbVector2) -> Result<(), String> {

@@ -22,6 +22,7 @@ public partial class Arena : Node2D
 
     public void StartGame()
     {
+        GameManager.Instance.StartGame();
         foreach (Player player in GameManager.Instance.GetPlayerList())
         {
             GD.Print("Adding player");
