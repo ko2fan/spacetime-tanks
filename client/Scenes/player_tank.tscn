@@ -20,3 +20,5 @@ texture = ExtResource("1_6ueeh")
 position = Vector2(29, 0)
 rotation = 1.5708
 texture = ExtResource("2_55431")
+
+[node name="Camera2D" type="Camera2D" parent="."]
